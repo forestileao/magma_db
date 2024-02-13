@@ -2,13 +2,13 @@
 // Created by hellhat on 2/12/24.
 //
 
-#ifndef PEDRO_DB_SRC_CORE_DOCUMENT_H_
-#define PEDRO_DB_SRC_CORE_DOCUMENT_H_
+#ifndef MAGMA_DB_SRC_CORE_DOCUMENT_H_
+#define MAGMA_DB_SRC_CORE_DOCUMENT_H_
 
 #include <uuid/uuid.h>
 #include <string>
 #include <unordered_map>
-namespace PedroDb::Core
+namespace MagmaDb::Core
 {
 	class DocumentValue;
 
@@ -36,4 +36,4 @@ namespace PedroDb::Core
 	};
 }
 
-#endif //PEDRO_DB_SRC_CORE_DOCUMENT_H_
+#endif //MAGMA_DB_SRC_CORE_DOCUMENT_H_

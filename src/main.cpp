@@ -2,9 +2,9 @@
 #include "core/Document.h"
 #include "core/DocumentValue.h"
 
-using PedroDb::Core::Document;
-using PedroDb::Core::DocumentValue;
-using PedroDb::Core::DocumentValueType;
+using MagmaDb::Core::Document;
+using MagmaDb::Core::DocumentValue;
+using MagmaDb::Core::DocumentValueType;
 
 int main()
 {

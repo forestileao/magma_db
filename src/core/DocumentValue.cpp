@@ -4,7 +4,7 @@
 
 #include "DocumentValue.h"
 
-using namespace PedroDb::Core;
+using namespace MagmaDb::Core;
 
 // Default constructor
 DocumentValue::DocumentValue() : type(DocumentValueType::NONE), value(std::monostate())

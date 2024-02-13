@@ -8,15 +8,15 @@
 #include <memory>
 #include "Document.h"
 
-#ifndef PEDRO_DB_SRC_CORE_DOCUMENTVALUE_H_
-#define PEDRO_DB_SRC_CORE_DOCUMENTVALUE_H_
+#ifndef MAGMA_DB_SRC_CORE_DOCUMENTVALUE_H_
+#define MAGMA_DB_SRC_CORE_DOCUMENTVALUE_H_
 
 #define EMPTY_KEY "empty_key"
 
 using std::vector;
 using std::unordered_map;
 
-namespace PedroDb::Core
+namespace MagmaDb::Core
 {
 	using Array = vector<DocumentValue>;
 
@@ -86,4 +86,4 @@ namespace PedroDb::Core
 	};
 }
 
-#endif //PEDRO_DB_SRC_CORE_DOCUMENTVALUE_H_
+#endif //MAGMA_DB_SRC_CORE_DOCUMENTVALUE_H_

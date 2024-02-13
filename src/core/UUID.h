@@ -3,10 +3,10 @@
 //
 #include <string>
 
-#ifndef PEDRO_DB_SRC_CORE_UUID_H_
-#define PEDRO_DB_SRC_CORE_UUID_H_
+#ifndef MAGMA_DB_SRC_CORE_UUID_H_
+#define MAGMA_DB_SRC_CORE_UUID_H_
 
-namespace PedroDb::Core
+namespace MagmaDb::Core
 {
 	class UUID final
 	{
@@ -15,4 +15,4 @@ namespace PedroDb::Core
 	};
 }
 
-#endif //PEDRO_DB_SRC_CORE_UUID_H_
+#endif //MAGMA_DB_SRC_CORE_UUID_H_

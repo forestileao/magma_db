@@ -9,7 +9,7 @@
 #include <random>
 #include <sstream>
 
-using namespace PedroDb::Core;
+using namespace MagmaDb::Core;
 
 std::string UUID::generateUUID()
 {

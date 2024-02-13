@@ -8,7 +8,7 @@
 #include "UUID.h"
 #include "DocumentValue.h"
 
-using namespace PedroDb::Core;
+using namespace MagmaDb::Core;
 
 Document::Document() : id(UUID::generateUUID()), properties()
 {
