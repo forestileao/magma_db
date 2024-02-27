@@ -1,6 +1,7 @@
 #include <iostream>
 #include "core/Document.h"
 #include "core/DocumentValue.h"
+#include "core/UUID.h"
 
 using MagmaDb::Core::Document;
 using MagmaDb::Core::DocumentValue;
@@ -40,4 +41,19 @@ int main()
 	<< "\nBoolean: " << document["boolean"].getBool()
 	<< "\nInner Document Id: " << document["anotherDocument"].getDocument().getId()
 	<< std::endl;
+
+	// find uuid duplicates
+	std::unordered_map<std::string, int> uuids;
+	MagmaDb::Core::UUIDGenerator uuidGenerator;
+	for (int i = 0; i < 10000000; i++) {
+		std::string uuid = uuidGenerator.generateUUIDString();
+		if (uuids.find(uuid) != uuids.end()) {
+			std::cout << "Duplicate UUID: " << uuid << " on " << i + 1 << std::endl;
+			break;
+		} else {
+			uuids[uuid] = 1;
+		}
+	}
+
+	return 0;
 }

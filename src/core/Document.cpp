@@ -10,8 +10,10 @@
 
 using namespace MagmaDb::Core;
 
-Document::Document() : id(UUID::generateUUID()), properties()
+Document::Document() : properties()
 {
+	UUIDGenerator uuidGenerator;
+	id = uuidGenerator.generateUUIDString();
 }
 
 Document::Document(std::string id) : id(std::move(id)), properties()
