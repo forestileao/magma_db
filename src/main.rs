@@ -1,3 +1,7 @@
+mod btree;
+
+use btree::Node;
+
 fn main() {
-    println!("Hello, world!");
+    Node::new(3, true);
 }
