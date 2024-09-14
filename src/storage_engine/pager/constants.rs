@@ -1,6 +1,6 @@
 /// The size of a page in bytes.
 /// It depends on virtual memory page size of the OS.
-pub const PAGE_SIZE: u32 = 4096;
+pub const PAGE_SIZE: usize = 4096;
 
 /// To maintain compatibility and prevent restructuring, we allocate extra bytes
 /// for the Database header. This reserved space provides room for potential future
