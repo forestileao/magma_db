@@ -1,16 +1,21 @@
 use self::constants::{PAGE_SIZE, DATABASE_HEADER_SIZE};
 use self::db_header::DatabaseHeader;
+use std::os::unix::fs::FileExt;
 
+use constants::{METAPAGE_ID, METAPAGE_SIZE};
 use log::{ debug, info };
 use std::fs::File;
 use std::io::{ Error as IOError, Write };
 use std::result::Result;
 
-mod constants;
+use super::btree::constants::NODE_HEADER_SIZE;
+use super::btree::node::NodeHeader;
+
+pub mod constants;
 mod db_header;
 
 type PagerResult<T> = Result<T, IOError>;
-
+pub type PageBuffer = Vec<u8>;
 
 pub struct Config {
     pub db_file_path: String,
@@ -22,7 +27,7 @@ pub struct Pager {
 
 impl Pager {
     pub fn new(config: Config) -> PagerResult<Self> {
-        debug!("Trying to open file {}. Or create if it doesn't exist.", &config.db_file_path);
+        debug!("Trying to open filaae {}. Or create if it doesn't exist.", &config.db_file_path);
 
         let db_file = File::options()
             .read(true)
@@ -36,6 +41,23 @@ impl Pager {
         pager.init_db_file_if_new()?;
 
         Ok(pager)
+    }
+
+    pub fn is_initialized(&self) -> bool {
+        // Try to load the metapage:
+        let read_result = self.read_page(METAPAGE_ID);
+
+        if read_result.is_err() {
+            return false;
+        }
+
+        let page_buffer = read_result.unwrap();
+        let start_offset = DATABASE_HEADER_SIZE as usize;
+        let end_offset = start_offset + (NODE_HEADER_SIZE as usize);
+        let node_header_buffer = &page_buffer[start_offset..end_offset];
+
+        let result = bincode::deserialize::<NodeHeader>(node_header_buffer);
+        result.is_ok()
     }
 
     fn init_db_file_if_new(&mut self) -> PagerResult<()> {
@@ -66,8 +88,36 @@ impl Pager {
         Ok(())
     }
 
-    fn new_page_buffer() -> [u8; PAGE_SIZE] {
-        [0; PAGE_SIZE]
+    fn new_page_buffer() -> PageBuffer {
+        vec![0_u8; PAGE_SIZE as usize]
+    }
+
+    fn read_page(&self, page_id: u32) -> PagerResult<PageBuffer> {
+        let mut page_buffer = Self::new_page_buffer();
+        let file_offset = (page_id * PAGE_SIZE) as u64;
+
+        let result = self.db_file.read_exact_at(&mut page_buffer, file_offset);
+
+        if let Err(error) = result {
+            let error_kind = error.kind();
+            // TODO: Handle the case where the page is not found
+            // return match error_kind {
+            //     ErrorKind::UnexpectedEof => Err(PageNotFound),
+            //     _ => todo!("We dont support handling any IO errors"),
+            // };
+            todo!("We dont support handling any Read Page errors by now :D");
+        }
+
+        Ok(page_buffer)
+    }
+
+    fn new_page_payload_buffer(&self, page_id: Option<u32>) -> PageBuffer {
+        let page_size = match page_id {
+            Some(METAPAGE_ID) => METAPAGE_SIZE,
+            _ => PAGE_SIZE,
+        };
+
+        vec![0_u8; page_size as usize]
     }
 }
 
@@ -139,7 +189,7 @@ mod tests {
     #[test]
     fn test_new_page_buffer() {
         let buffer = Pager::new_page_buffer();
-        assert_eq!(buffer.len(), PAGE_SIZE);
+        assert_eq!(buffer.len(), PAGE_SIZE as usize);
         assert!(buffer.iter().all(|&x| x == 0));
     }
 
@@ -157,7 +207,7 @@ mod tests {
         let file_contents = fs::read(&file_path).unwrap();
 
         // Verify file size is at least PAGE_SIZE
-        assert!(file_contents.len() >= PAGE_SIZE);
+        assert!(file_contents.len() >= PAGE_SIZE as usize);
 
         // Deserialize the DatabaseHeader from the buffer
         let deserialized_header: DatabaseHeader = bincode::deserialize(&file_contents[..DATABASE_HEADER_SIZE]).unwrap();

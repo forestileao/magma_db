@@ -3,6 +3,14 @@ name = "magma_db"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "magma_db"
+path = "src/lib.rs"
+
+[[bin]]
+name = "magma_db"
+path = "src/main.rs"
+
 [dependencies]
 bincode = "1.3.3"
 log = "0.4.22"
